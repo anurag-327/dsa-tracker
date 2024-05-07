@@ -19,12 +19,18 @@ function Card() {
         
       </div>
       <h2 className="font-bold font-serif text-3xl text-blue-600">Array</h2>
-      <div>
         <h3>30 Question</h3>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
-          Track
+      <div>
+        <h1>Progress:</h1>
+        <button className="bg-blue-500 hover:bg-blue-700 w-72 text-white font-bold py-1 px-4 rounded">
         </button>
       </div>
+      <div className="flex flex-row mt-6 gap-40">
+      <h2>1/30</h2>
+        <button className="bg-green-400 hover:bg-green-600 w-full text-white font-bold py-1 px-4 rounded-lg">✩stared
+        </button>
+      </div>
+      
     </div>
     
     </div>
