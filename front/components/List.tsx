@@ -1,3 +1,5 @@
+import { Atom } from "@phosphor-icons/react";
+
 export default function List() {
   return (
     <div className="flex items-center justify-between w-full p-4 ">
@@ -8,13 +10,23 @@ export default function List() {
 
 function Card() {
   return (
-    <div className="flex rounded-md bg-zinc-100 border-2 min-h-[120px] aspect-square flex-col w-fit items-center justify-between p-4 ">
-      <h2>Love Babbar 450 DSA</h2>
+    <div className="gap-8 grid grid-cols-1 new md:grid-cols-2 lg:grid-cols-3 max-w-[1160px] mx-auto">
+    
+    <div className="hover:scale-110 transition-all duration-200 ease-in cursor-pointer mt-8 shadow-clay card bg-slate-300 h-[230px] w-[325px] rounded-[50px] ml-5 pb-3 flex items-center flex-col px-12 ">
+      <div className="bg-violet-600 w-16 h-12 rounded-[10px] z-50 -mt-6 flex justify-center items-center">
+        <h1 className="ml-3">Topic logo</h1>
+        {/* <Atom size={30} /> */}
+        
+      </div>
+      <h2 className="font-bold font-serif text-3xl text-blue-600">Array</h2>
       <div>
+        <h3>30 Question</h3>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
           Track
         </button>
       </div>
+    </div>
+    
     </div>
   );
 }
