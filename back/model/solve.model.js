@@ -27,5 +27,4 @@ const responseSchema = new mongoose.Schema({
     }
 });
 
-// Exporting the model
 export default mongoose.model('Response', responseSchema);
