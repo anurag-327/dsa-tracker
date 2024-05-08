@@ -1,6 +1,6 @@
-
 import sheetSchema from '../model/sheet.model.js';
 import questionSchema from '../model/question.model.js';
+import starredSchema from '../model/starred.model.js';
 export async function createSheet(req, res) {
     try {
         const { name, title, isPublic } = req.body;
@@ -105,3 +105,19 @@ export async function removeQuestionFromSheet(req, res) {
     }
 }
 
+export async function getTrendingSheets(req, res) {
+    try {
+        const topSheets = await starredSchema.aggregate([
+            { $group: { _id: "$sheetId", stars: { $sum: 1 } } },
+            { $sort: { stars: -1 } },
+            { $limit: 5 }
+        ]);
+        const sheetIds = topSheets.map(sheet => sheet._id);
+
+        const sheets = await sheetSchema.find({ _id: { $in: sheetIds } });
+
+        res.status(200).json({ sheets });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}

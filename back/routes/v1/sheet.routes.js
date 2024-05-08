@@ -135,10 +135,30 @@
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/sheets/trendingsheets:
+ *   get:
+ *     summary: Get top sheets based on the number of stars
+ *     responses:
+ *       '200':
+ *         description: Top sheets retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 sheets:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Sheet'
+ *       '500':
+ *         description: Internal server error
+ */
 
 import express from 'express';
 const router = express.Router();
-import { addQuestionToSheet, createSheet, deleteSheet, getSheet, getSheets, removeQuestionFromSheet } from '../../controller/sheet.controller.js';
+import { addQuestionToSheet, createSheet, deleteSheet, getSheet, getSheets, getTrendingSheets, removeQuestionFromSheet } from '../../controller/sheet.controller.js';
 import { verifyToken } from '../../middleware/verifyToken.middleware.js';
 
 router.post("/create", verifyToken, createSheet)
@@ -147,6 +167,6 @@ router.get("/getsheets", getSheets)
 router.delete("/delete/:id", verifyToken, deleteSheet)
 router.post("/addquestion", verifyToken, addQuestionToSheet)
 router.delete("/removequestion", verifyToken, removeQuestionFromSheet)
-
+router.get("/trendingsheets", getTrendingSheets)
 export default router;
 
