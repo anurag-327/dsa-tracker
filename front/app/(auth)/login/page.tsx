@@ -1,7 +1,6 @@
 "use client";
 import { Formik, FormikHelpers } from "formik";
 import { useState, useEffect } from "react";
-import { ShieldWarning } from "@phosphor-icons/react/dist/ssr";
 import * as Yup from "yup";
 
 import { getToken, setToken, removeToken } from "@/helper/tokenHandler";
@@ -21,15 +20,15 @@ export default function page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callback_url = searchParams.get("callback_url");
-  const status = searchParams.get("status");
-  const quickSignToken = searchParams.get("token");
   const [showPassword, setShowpassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [quickSignLoading, setQuickSignLoading] = useState<boolean>(false);
   const [error, setError] = useState<String>("");
   const initialValues: formValues = { cred: "", password: "" };
-  const url = window.location.href;
-  const { user, setUser } = useStore();
+  // @ts-ignore
+  const loggedInUser = useStore((state) => state.loggedInUser);
+  // @ts-ignore
+  const setLoggedInUser = useStore((state) => state.setLoggedInUser);
   async function handleSignin(values: formValues) {
     setError("");
     setLoading(true);
@@ -45,13 +44,13 @@ export default function page() {
         }),
       };
       const response = await fetch(
-        process.env.API_URL + "/api/auth/login",
+        process.env.NEXT_PUBLIC_API_URL + "/auth/login",
         body
       );
       const data = await response.json();
       if (response.status === 200) {
         setToken(data.token);
-        setUser(data.user);
+        setLoggedInUser(data.user);
         if (callback_url) router.push(callback_url);
         else router.push("/");
       } else {
@@ -59,14 +58,15 @@ export default function page() {
         setError(data.message);
       }
     } catch (error) {
+      console.log(error);
       setLoading(false);
-      setError("Network Error");
+      setError("Client error, please try again later");
     }
   }
   useEffect(() => {
     const token = getToken();
     if (token) {
-      console.log(token);
+      // console.log(token);
       if (callback_url) router.push(callback_url);
       else router.push("/");
     }
@@ -207,7 +207,7 @@ export default function page() {
                     Didn't have any account?{" "}
                     <a
                       className="font-semibold text-blue-500 underline text-md"
-                      href="/auth/signup"
+                      href="/signup"
                     >
                       Sign Up
                     </a>

@@ -2,7 +2,6 @@
 import { Formik, FormikHelpers } from "formik";
 import { useState, useEffect } from "react";
 import * as Yup from "yup";
-
 import { getToken, setToken, removeToken } from "@/helper/tokenHandler";
 import { ShieldWarning } from "@phosphor-icons/react/dist/ssr";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -27,12 +26,15 @@ const SignupSchema = Yup.object().shape({
     .min(5, "password length should be in range 5-20")
     .max(20, "password length should be in range 5-20"),
 });
-export default function page() {
+export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callback_url = searchParams.get("callback_url");
   const [showPassword, setShowpassword] = useState<Boolean>(false);
-  const { user, setUser } = useStore();
+  // @ts-ignore
+  const loggedInUser = useStore((state) => state.loggedInUser);
+  // @ts-ignore
+  const setLoggedInUser = useStore((state) => state.setLoggedInUser);
   const initialValues: formValues = {
     userName: "",
     email: "",
@@ -41,7 +43,6 @@ export default function page() {
   };
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<String>("");
-  const url = window.location.href;
   async function handleSignup(values: formValues) {
     setError("");
     setLoading(true);
@@ -63,10 +64,12 @@ export default function page() {
         process.env.NEXT_PUBLIC_API_URL + "/auth/signup",
         body
       );
+      console.log(response);
       const data = await response.json();
       if (response.status == 201) {
+        console.log(data);
         setToken(data.token);
-        setUser(data.user);
+        setLoggedInUser(data.user);
         if (callback_url) router.push(callback_url);
         else router.push("/");
       } else {
@@ -74,8 +77,9 @@ export default function page() {
         setError(data.message);
       }
     } catch (error) {
+      console.log(error);
       setLoading(false);
-      setError("Network Error");
+      setError("Client side error, please try again later");
     }
   }
   useEffect(() => {
@@ -84,7 +88,7 @@ export default function page() {
       if (callback_url) router.push(callback_url);
       else router.push("/");
     }
-  }, [user]);
+  }, [loggedInUser]);
   return (
     <main className="w-full mt-6 md:mt-0 font-sans min-h-[100vh] flex justify-center items-center">
       <div className="flex flex-col gap-8  md:w-[450px] w-[100%]  px-4 py-8 sm:rounded-2xl sm:border sm:shadow-sm border-gray-300">
@@ -307,7 +311,7 @@ export default function page() {
                     Already have an account?{" "}
                     <a
                       className="font-semibold text-blue-500 underline text-md"
-                      href="/auth/login"
+                      href="/login"
                     >
                       Sign In
                     </a>
