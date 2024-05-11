@@ -120,13 +120,6 @@ function Row({
   number: number;
   sheet: SheetProps;
 }) {
-  const difficultyColor = {
-    easy: "bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500",
-    medium:
-      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-green-200",
-    hard: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-green-200",
-  };
-
   let { _id, name, title, difficulty, url1, tags } = data;
   let sortedTags = sortByLength(tags);
   return (
@@ -146,8 +139,19 @@ function Row({
       <td className="px-6 py-4 h-px w-px whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
         <span
           className={`
-            py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full 
-            ${difficultyColor[difficulty]}`}
+            py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-full
+            ${
+              difficulty == "easy" &&
+              `bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500`
+            } 
+            ${
+              difficulty == "medium" &&
+              `bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-green-200`
+            } 
+            ${
+              difficulty == "hard" &&
+              `bg-red-100 text-red-800 dark:bg-red-900 dark:text-green-200`
+            }`}
         >
           {difficulty}
         </span>

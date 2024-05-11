@@ -24,7 +24,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function SessionStatus() {
-  const { loggedInUser, setLoggedInUser } = useStore();
+  // @ts-ignore
+  const loggedInUser = useStore((state) => state.loggedInUser);
+  // @ts-ignore
+  const setLoggedInUser = useStore((state) => state.setLoggedInUser);
   const [dropdown, setDropdown] = useState<boolean>(false);
   useEffect(() => {
     const token = getToken();
@@ -37,7 +40,7 @@ export default function SessionStatus() {
         if (response.data.status === 200) setLoggedInUser(response.data.user);
       })();
     }
-  });
+  }, []);
   if (loggedInUser)
     return (
       <div className="flex gap-2 items-center">
