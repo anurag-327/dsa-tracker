@@ -32,6 +32,12 @@ export default function Table({
   sheet: SheetProps;
   questions: questionProps[];
 }) {
+  if (questions.length === 0)
+    return (
+      <div className="mt-10 bg-gray-100 border rounded-md w-full p-4 text-center">
+        <p>No questions found</p>
+      </div>
+    );
   return (
     <div className="flex flex-col mt-10 w-full max-w-5xl">
       <div className="-m-1.5 overflow-x-auto">

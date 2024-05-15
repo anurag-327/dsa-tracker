@@ -66,7 +66,7 @@ export default function TopSheets() {
 
 function Card(props: TrendingSheetsProps) {
   return (
-    <div className="cursor-pointer p-4 flex flex-col justify-start min-h-[200px] border-gray-300 shadow-sm rounded-md gap-2 border-2 ">
+    <div className="cursor-pointer p-4 flex flex-col justify-start min-h-[200px] border-gray-200 shadow-sm rounded-md gap-2 border-2 ">
       <div className="flex w-fit px-4 py-0.5 gap-2 items-center border border-zinc-300 rounded-full">
         <Crown size={20} weight="fill" className="text-yellow-500" />
         <span>#{props.rank}</span>

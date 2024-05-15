@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { set } from "react-hook-form";
 interface questionProps {
   addedBy: string;
   _id: string;
@@ -36,20 +37,29 @@ interface SheetProps {
 export default function Page({ params }: { params: { slug: string } }) {
   const [questions, setQuestions] = useState<questionProps[]>([]);
   const [sheet, setSheet] = useState<SheetProps>();
+  const [notFound, setNotFound] = useState(false);
   useEffect(() => {
-    (async function () {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_API_URL + `/sheets/getsheet/${params.slug}`
-      );
-      if (response.status === 200) {
-        setSheet(response.data.sheet);
-        setQuestions(response.data.sheet.questions);
-      }
-    })();
+    try {
+      (async function () {
+        const response = await axios.get(
+          process.env.NEXT_PUBLIC_API_URL + `/sheets/getsheet/${params.slug}`
+        );
+        if (response.status === 200) {
+          setSheet(response.data.sheet);
+          setQuestions(response.data.sheet.questions);
+        } else {
+          setNotFound(true);
+        }
+      })();
+    } catch (error) {
+      setNotFound(true);
+    }
   }, [params.slug]);
+
+  if (notFound) return <p>Sheet not found</p>;
   return (
     <main className="flex min-h-screen  overflow-hidden w-full flex-col items-center gap-4 sm:px-8 px-4">
-      <div className="mt-20 w-full flex flex-col items-center">
+      <div className="mt-20 max-w-5xl w-full flex flex-col items-center">
         {sheet && questions ? (
           <>
             <Description sheet={sheet} />

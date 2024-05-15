@@ -3,7 +3,7 @@ import questionSchema from '../model/question.model.js';
 import starredSchema from '../model/starred.model.js';
 export async function createSheet(req, res) {
     try {
-        const { name, title, isPublic } = req.body;
+        const { name, title, isPublic, description } = req.body;
         if (!name || !title || isPublic === undefined)
             return res.status(400).json({ error: 'Missing Essential fields' });
         const newSheet = new sheetSchema({

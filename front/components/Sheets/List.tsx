@@ -27,19 +27,25 @@ export default function List() {
   const [sheets, setSheets] = useState<SheetProps[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    (async function () {
-      const response = await axios.get(
-        process.env.NEXT_PUBLIC_API_URL + "/sheets/getsheets"
-      );
-      if (response.status === 200) {
-        if (response.data) {
+    try {
+      (async function () {
+        const response = await axios.get(
+          process.env.NEXT_PUBLIC_API_URL + "/sheets/getsheets"
+        );
+        if (response.status === 200) {
+          if (response.data) {
+            setLoading(false);
+            setSheets(response.data.sheets);
+          }
+        } else {
           setLoading(false);
-          setSheets(response.data.sheets);
+          setSheets([]);
         }
-      } else {
-        setLoading(false);
-      }
-    })();
+      })();
+    } catch (error) {
+      setLoading(false);
+      setSheets([]);
+    }
   }, []);
   return (
     <div className="sm:max-w-4xl w-full mt-20">
@@ -111,7 +117,7 @@ function Card(props: SheetProps) {
         Solve Now
       </a>
 
-      <hr className="border-gray-200 mt-2" />
+      {/* <hr className="border-gray-200 mt-2" />
       <div className="text-sm ">
         Added By :{" "}
         <a
@@ -120,7 +126,7 @@ function Card(props: SheetProps) {
         >
           {props.addedBy.username}
         </a>
-      </div>
+      </div> */}
     </a>
   );
 }
