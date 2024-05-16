@@ -26,7 +26,7 @@ export async function getSheet(req, res) {
     try {
         const sheet = await sheetSchema.findOne({ title: req.params.id, isPublic: true }).populate({ path: "addedBy", select: "username name -_id" }).populate({ path: "questions", select: "-__v -createdAt -updatedAt _id" }).select("-updatedAt -__v ")
         if (!sheet)
-            return res.status(400).json({ error: 'Sheet not found' });
+            return res.status(404).json({ error: 'Sheet not found' });
         res.status(200).json({ sheet });
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -121,6 +121,15 @@ export async function getTrendingSheets(req, res) {
             return { ...sheet._doc, starCount };
         });
         res.status(200).json({ sheets: sheetsWithStarCount });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+export async function getUserSheets(req, res) {
+    try {
+        const sheets = await sheetSchema.find({ addedBy: req.user._id }).populate({ path: "addedBy", select: "username name " }).select('-__v ');
+        res.status(200).json({ sheets });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

@@ -83,7 +83,7 @@ export default function List() {
   );
 }
 
-function Card(props: SheetProps) {
+export function Card(props: SheetProps) {
   return (
     <a
       href={`sheets/${props.title}`}

@@ -24,7 +24,7 @@ export default function Banner() {
         </p>
         <div className="flex sm:flex-row flex-col justify-center sm:gap-4 gap-2 items-center">
           <a
-            href="/sheets/create"
+            href="manage/sheets/create-sheet"
             className="bg-blue-500 w-fit text-white rounded-full px-4"
           >
             Create a sheet
