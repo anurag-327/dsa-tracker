@@ -123,10 +123,10 @@ function Card(props: SheetProps) {
       </div>
 
       <a
-        href={`/sheets/${props.title}`}
+        href={`/manage/sheets/${props.title}`}
         className="border-2 rounded-full w-full text-center float-end text-blue-600 border-gray-200 font-bold py-1 px-4 "
       >
-        Solve Now
+        Manage Sheet
       </a>
     </a>
   );
