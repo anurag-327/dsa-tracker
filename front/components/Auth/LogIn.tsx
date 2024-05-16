@@ -72,7 +72,13 @@ export default function Login() {
     }
   }, []);
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen justify-center items-center overflow-hidden w-full">
+          <p> Loading...</p>
+        </div>
+      }
+    >
       <main className="w-full font-sans h-[100vh] flex justify-center items-center">
         <div className="flex flex-col gap-8  sm:w-[380px] w-[100%] px-4 py-8 sm:rounded-2xl sm:border sm:shadow-sm border-gray-300">
           <div>
