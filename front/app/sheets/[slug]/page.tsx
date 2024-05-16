@@ -1,6 +1,8 @@
 "use client";
-import Table from "@/components/Sheets/Table";
-import { Book } from "@phosphor-icons/react";
+import Table from "@/components/Ui/Table";
+import { getToken } from "@/helper/tokenHandler";
+import { questionProps } from "@/types/questions.types";
+import { sheetProps, userProps } from "@/types/sheet.types";
 import {
   BookBookmark,
   Bookmark,
@@ -9,35 +11,12 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
-interface questionProps {
-  addedBy: string;
-  _id: string;
-  createdAt?: string;
-  difficulty: string;
-  name: string;
-  title: string;
-  updatedAt?: string;
-  url1: string;
-  url2?: string;
-  tags: string[];
-}
-interface SheetProps {
-  _id: string;
-  addedBy: { name: string; username: string };
-  description: string;
-  isPublic: boolean;
-  name: string;
-  questions: string[];
-  title: string;
-  starCount: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import toast, { Toaster } from "react-hot-toast";
 export default function Page({ params }: { params: { slug: string } }) {
   const [questions, setQuestions] = useState<questionProps[]>([]);
-  const [sheet, setSheet] = useState<SheetProps>();
+  const [sheet, setSheet] = useState<sheetProps>();
   const [notFound, setNotFound] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
   useEffect(() => {
     try {
       (async function () {
@@ -55,15 +34,39 @@ export default function Page({ params }: { params: { slug: string } }) {
       setNotFound(true);
     }
   }, [params.slug]);
+  function addHandler(qid: string) {
+    if (getToken() == null) {
+      toast.error("Login to mark questions");
+      return;
+    }
 
+    toast.error("To be implemented soon");
+    setSelected((prev) => [...prev, qid]);
+  }
+  function removeHandler(qid: string) {
+    if (getToken() == null) {
+      toast.error("Login to mark questions");
+      return;
+    }
+    toast.error("To be implemented soon");
+    setSelected((prev) => prev.filter((id) => id !== qid));
+  }
   if (notFound) return <p>Sheet not found</p>;
   return (
     <main className="flex min-h-screen  overflow-hidden w-full flex-col items-center gap-4 sm:px-8 px-4">
+      <Toaster position="top-right" />
       <div className="mt-20 max-w-5xl w-full flex flex-col items-center">
         {sheet && questions ? (
           <>
             <Description sheet={sheet} />
-            <Table sheet={sheet} questions={questions} />
+            <Table
+              questions={questions}
+              setQuestions={setQuestions}
+              selected={selected}
+              setSelected={setSelected}
+              addHandler={addHandler}
+              removeHandler={removeHandler}
+            />
           </>
         ) : (
           <p>Loading...</p>
@@ -73,9 +76,9 @@ export default function Page({ params }: { params: { slug: string } }) {
   );
 }
 
-function Description({ sheet }: { sheet: SheetProps }) {
+function Description({ sheet }: { sheet: sheetProps }) {
   return (
-    <div className="flex flex-col sm:mt-20 w-full max-w-5xl">
+    <div className="flex flex-col mb-10 sm:mt-10 w-full max-w-5xl">
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl font-bold">{sheet.name}</h1>
         <p className="sm:-mt-4">{sheet.description}</p>
@@ -87,17 +90,19 @@ function Description({ sheet }: { sheet: SheetProps }) {
                 {sheet.starCount}
               </span>
             </div>
-            <BookmarkSheet bookmarked={true} />
+            {/* <BookmarkSheet bookmarked={true} /> */}
           </div>
-          <div className="text-sm ">
-            Added By :{" "}
-            <a
-              href={`/user/${sheet.addedBy.username}`}
-              className="text-blue-600 underline font-semibold"
-            >
-              {sheet.addedBy.username}
-            </a>
-          </div>
+          {/* {typeof sheet.addedBy == userProps && (
+            <div className="text-sm ">
+              Added By :{" "}
+              <a
+                href={`/user/${sheet.addedBy.username}`}
+                className="text-blue-600 underline font-semibold"
+              >
+                {sheet.addedBy.username}
+              </a>
+            </div>
+          )} */}
         </div>
       </div>
     </div>
